@@ -28,6 +28,8 @@
 
 Prosyo's hosted MCP endpoint is plug-and-play. You do not create an API key, you do not sign up for a developer token, and you do not add authentication headers. The client config is only the URL.
 
+The first time Claude or Cursor connects, Prosyo opens an allow screen in the browser so you can choose the workspace. That is a one-time confirm. It is not an API key, and it is not a header in the config.
+
 Endpoint: `https://app.prosyo.com/ai`
 
 ### Claude Desktop
