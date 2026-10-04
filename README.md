@@ -7,6 +7,7 @@
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Protocol%20Standard-blue" alt="MCP Protocol Standard" /></a>
   <img src="https://img.shields.io/badge/Zero--Config-No%20Auth%20Required-brightgreen" alt="Zero-Config / No Auth Required" />
   <a href="https://smithery.ai/server/hello-kmun/prosyo"><img src="https://img.shields.io/badge/Smithery-Verified-6E56CF" alt="Smithery Verified" /></a>
+  <a href="https://registry.modelcontextprotocol.io/?q=io.github.ShubhamTuts%2Fprosyo"><img src="https://img.shields.io/badge/MCP%20Registry-Listed-blue" alt="Official MCP Registry" /></a>
   <img src="https://img.shields.io/badge/Status-Active-success" alt="Status: Active" />
 </p>
 
@@ -177,6 +178,7 @@ flowchart LR
 - **Support:** [support@prosyo.com](mailto:support@prosyo.com)
 - **Connect Claude:** [https://prosyo.com/docs/ai/connect-claude/](https://prosyo.com/docs/ai/connect-claude/)
 - **Smithery:** [https://smithery.ai/server/hello-kmun/prosyo](https://smithery.ai/server/hello-kmun/prosyo)
+- **Official MCP Registry:** [io.github.ShubhamTuts/prosyo](https://registry.modelcontextprotocol.io/?q=io.github.ShubhamTuts%2Fprosyo)
 - **Source:** [https://github.com/ShubhamTuts/prosyo-mcp-server](https://github.com/ShubhamTuts/prosyo-mcp-server)
 
 MIT License. Copyright (c) 2026 Shubham Kumar Sinha.
