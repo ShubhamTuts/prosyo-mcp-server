@@ -293,4 +293,4 @@ Prosyo's record points at the hosted Streamable HTTP endpoint [https://app.prosy
 - **Reference servers:** [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)
 - **Source:** [https://github.com/ShubhamTuts/prosyo-mcp-server](https://github.com/ShubhamTuts/prosyo-mcp-server)
 
-MIT License. Copyright (c) 2026 Shubham Kumar Sinha.
+Copyright (c) 2026 Prosyo.
