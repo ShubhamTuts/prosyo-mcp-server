@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.svg" width="120" alt="Prosyo" />
+  <img src="./assets/logo.png" width="120" alt="Prosyo" />
 </p>
 
 <p align="center">
@@ -170,6 +170,24 @@ flowchart LR
 | --- | --- | --- |
 | `approve_review` | Write | Prepare approving people waiting in the review queue (run ids from `list_review_queue`). Approval researches them for credits. You still see the message before it is sent. Runs only after `confirm_action`. |
 | `confirm_action` | Write | Run a launch, enroll, resume, inbox send, unlock, research, enrichment, or review approval after you explicitly confirmed in this chat. Pass `confirmation_token` from the previous tool. Never called unless you said yes. |
+
+---
+
+## Official MCP Registry
+
+Prosyo is listed in the Official MCP Registry as [`io.github.ShubhamTuts/prosyo`](https://registry.modelcontextprotocol.io/?q=io.github.ShubhamTuts%2Fprosyo) version 1.0.1.
+
+The registry is the community index of publicly accessible MCP servers. The [Model Context Protocol organization](https://github.com/modelcontextprotocol) on GitHub runs it collaboratively, backed by Anthropic, GitHub, Microsoft, and PulseMCP.
+
+| | |
+| --- | --- |
+| Official platform | [Model Context Protocol Registry](https://registry.modelcontextprotocol.io/) |
+| Registry service | [modelcontextprotocol/registry](https://github.com/modelcontextprotocol/registry), the Go service behind the centralized index |
+| Reference servers | [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers), reference implementations maintained by the MCP steering group |
+| Record format | Open [`server.json`](./server.json) schema: reverse-DNS name, discovery metadata, and the remote execution path |
+| Downstream use | Upstream metadata index that clients, integrations, and other registries can read |
+
+Prosyo's record points at the hosted Streamable HTTP endpoint `https://app.prosyo.com/ai`. The manifest declares no API key and no authentication headers.
 
 ---
 

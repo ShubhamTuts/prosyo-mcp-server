@@ -9,7 +9,14 @@
     "source": "github",
     "id": "1404541454"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/ShubhamTuts/prosyo-mcp-server/main/assets/logo.png",
+      "mimeType": "image/png",
+      "sizes": ["1254x1254"]
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",
