@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prosyo MCP Server — Zero-config outbound for Claude, Cursor, and Windsurf</title>
+  <meta name="description" content="Instant Model Context Protocol server for Prosyo. One URL, no API key, no auth headers. Connect Claude, Cursor, Windsurf, and VS Code to LinkedIn, cold email, and the unified inbox." />
+  <link rel="canonical" href="https://shubhamtuts.github.io/prosyo-mcp-server/" />
+  <meta name="theme-color" content="#050816" />
+  <meta property="og:title" content="Prosyo MCP Server" />
+  <meta property="og:description" content="One URL. No API key. No auth headers. AI agents talk straight to Prosyo's multichannel B2B outbound engine." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://shubhamtuts.github.io/prosyo-mcp-server/" />
+  <meta property="og:image" content="https://shubhamtuts.github.io/prosyo-mcp-server/logo.png" />
+  <link rel="icon" href="logo.png" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-2: #0a1024;
+      --card: rgba(12, 20, 48, 0.82);
+      --line: rgba(120, 190, 255, 0.18);
+      --text: #eef4ff;
+      --muted: #9aa8c7;
+      --cyan: #67e8ff;
+      --blue: #3d7dff;
+      --deep: #16306e;
+      --read: #7dffa8;
+      --write: #ffd56a;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(900px 480px at 80% -10%, rgba(61, 125, 255, 0.28), transparent 60%),
+        radial-gradient(700px 420px at -10% 20%, rgba(103, 232, 255, 0.12), transparent 55%),
+        var(--bg);
+      font: 16px/1.6 "Segoe UI", system-ui, sans-serif;
+    }
+    a { color: var(--cyan); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: #fff; }
+    img { max-width: 100%; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header.nav {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(5, 8, 22, 0.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 700; }
+    .brand img { width: 36px; height: 36px; }
+    .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    .nav-links a:hover { color: var(--text); }
+    .hero { padding: 72px 0 40px; text-align: center; }
+    .hero img.logo { width: 120px; height: 120px; }
+    h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1.05; letter-spacing: -0.03em; margin: 18px 0 12px; }
+    .lede { max-width: 760px; margin: 0 auto 22px; color: var(--muted); font-size: 18px; }
+    .cta { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 22px 0; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 18px; border-radius: 999px;
+      text-decoration: none; font-weight: 650; border: 1px solid transparent;
+    }
+    .btn.primary { background: linear-gradient(180deg, #6ecbff, #2f6bff); color: #04101f; }
+    .btn.ghost { border-color: var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
+    .pills { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+    .pill { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cyan); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; text-decoration: none; }
+    section { padding: 28px 0 8px; }
+    h2 { font-size: 32px; letter-spacing: -0.03em; margin: 0 0 8px; }
+    h3 { margin: 28px 0 8px; font-size: 20px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card h3 { margin-top: 0; }
+    .path { color: var(--muted); font-size: 13px; }
+    pre {
+      margin: 12px 0 0;
+      padding: 14px;
+      overflow: auto;
+      border-radius: 12px;
+      background: #070b18;
+      border: 1px solid var(--line);
+      font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #d7e7ff;
+    }
+    .flow { display: grid; grid-template-columns: 1.1fr auto 1.2fr auto 1.3fr; gap: 10px; align-items: stretch; }
+    .hop, .arrow {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px;
+    }
+    .arrow { display: grid; place-items: center; color: var(--cyan); font-size: 13px; text-align: center; }
+    .hop strong { display: block; margin-bottom: 6px; }
+    .hop span, .arrow span { color: var(--muted); font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; color: #d7e7ff; }
+    .read { color: var(--read); font-weight: 700; }
+    .write { color: var(--write); font-weight: 700; }
+    .jumps { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 4px; }
+    .jumps a { text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; color: var(--text); font-size: 13px; }
+    .prompts { display: grid; gap: 10px; }
+    .prompts blockquote { margin: 0; padding: 12px 14px; border-left: 3px solid var(--blue); background: rgba(61,125,255,0.08); border-radius: 0 12px 12px 0; }
+    .links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .links a { display: block; text-decoration: none; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+    .links a strong { display: block; }
+    .links a span { color: var(--muted); font-size: 13px; }
+    footer { padding: 36px 0 56px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 860px) {
+      .grid, .links, .flow { grid-template-columns: 1fr; }
+      .arrow { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#top"><img src="logo.png" alt="" width="36" height="36" /> Prosyo MCP</a>
+      <nav class="nav-links" aria-label="Page">
+        <a href="#quickstart">Quickstart</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#tools">Tools</a>
+        <a href="#registry">Registry</a>
+        <a href="#resources">Links</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <img class="logo" src="logo.png" width="120" height="120" alt="Prosyo" />
+        <h1>Prosyo MCP Server</h1>
+        <p class="lede">Instant, zero-config Model Context Protocol server connecting AI agents (Claude, Cursor, Windsurf) directly to Prosyo's multichannel B2B outbound engine.</p>
+        <div class="cta">
+          <a class="btn primary" href="#quickstart">Connect in one minute</a>
+          <a class="btn ghost" href="https://prosyo.com">Open Prosyo</a>
+          <a class="btn ghost" href="https://registry.modelcontextprotocol.io/?q=io.github.ShubhamTuts%2Fprosyo">Official registry</a>
+        </div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/ShubhamTuts/prosyo-mcp-server/blob/main/LICENSE">MIT License</a>
+          <a class="pill" href="https://modelcontextprotocol.io">MCP Protocol Standard</a>
+          <span class="pill">Zero-config / No auth required</span>
+          <a class="pill" href="https://smithery.ai/server/hello-kmun/prosyo">Smithery Verified</a>
+          <span class="pill">Status: Active</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart">
+      <div class="wrap">
+        <h2>1-minute quickstart</h2>
+        <p class="sub">The hosted endpoint is ready. The client config is the URL. There is no API key to create, no developer token to sign up for, and no authentication header to paste. Endpoint: <a href="https://app.prosyo.com/ai"><code>https://app.prosyo.com/ai</code></a></p>
+        <p class="sub">The first time Claude or Cursor connects, Prosyo opens an allow screen in the browser so the workspace can be chosen. That confirm is once. It stays out of the config file.</p>
+        <div class="grid">
+          <article class="card" id="claude">
+            <h3><a href="https://prosyo.com/docs/ai/connect-claude/">Claude Desktop</a></h3>
+            <p class="path"><code>claude_desktop_config.json</code></p>
+            <pre>{
+  "mcpServers": {
+    "prosyo": {
+      "url": "https://app.prosyo.com/ai"
+    }
+  }
+}</pre>
+          </article>
+          <article class="card" id="cursor">
+            <h3>Cursor</h3>
+            <p class="path"><code>.cursor/mcp.json</code></p>
+            <pre>{
+  "mcpServers": {
+    "prosyo": {
+      "url": "https://app.prosyo.com/ai"
+    }
+  }
+}</pre>
+          </article>
+          <article class="card" id="windsurf">
+            <h3>Windsurf</h3>
+            <p class="path"><code>~/.codeium/windsurf/mcp_config.json</code></p>
+            <pre>{
+  "mcpServers": {
+    "prosyo": {
+      "serverUrl": "https://app.prosyo.com/ai"
+    }
+  }
+}</pre>
+          </article>
+          <article class="card" id="vscode">
+            <h3><a href="https://code.visualstudio.com/docs/agents/reference/mcp-configuration">VS Code and GitHub Copilot</a></h3>
+            <p class="path"><code>.vscode/mcp.json</code></p>
+            <pre>{
+  "servers": {
+    "prosyo": {
+      "type": "http",
+      "url": "https://app.prosyo.com/ai"
+    }
+  }
+}</pre>
+          </article>
+        </div>
+        <h3 id="smithery">Smithery</h3>
+        <p class="sub">Install into Claude from the <a href="https://smithery.ai/server/hello-kmun/prosyo">verified Smithery listing</a>.</p>
+        <pre>npx @smithery/cli install hello-kmun/prosyo --client claude</pre>
+        <h3>Ask this the moment it connects</h3>
+        <div class="prompts">
+          <blockquote>Give me the Prosyo overview: running campaigns, unread replies, and credits.</blockquote>
+          <blockquote>Draft a four-touch campaign for heads of talent at UK agencies. LinkedIn first, email on day five. Leave it as a draft.</blockquote>
+          <blockquote>Show unread inbox threads and draft a reply. Do not send it.</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="wrap">
+        <h2>Architecture</h2>
+        <p class="sub">The agent calls one public HTTPS endpoint. Prosyo runs LinkedIn, cold email, and the unified inbox behind it. Nothing installs locally.</p>
+        <div class="flow">
+          <div class="hop"><strong>AI client</strong><span>Claude, Cursor, Windsurf, VS Code</span></div>
+          <div class="arrow">HTTPS<span>Streamable HTTP</span></div>
+          <div class="hop"><strong><a href="https://app.prosyo.com/ai">app.prosyo.com/ai</a></strong><span>Hosted Prosyo MCP server</span></div>
+          <div class="arrow">→</div>
+          <div class="hop"><strong>Outbound engine</strong><span>LinkedIn + cold email + unified inbox</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools">
+      <div class="wrap">
+        <h2>30 tools</h2>
+        <p class="sub">Read tools return data immediately. Write tools that contact someone or spend credits prepare the action and finish only after <a href="#confirm_action"><code>confirm_action</code></a> once the chat says yes. Pause and save-to-list apply immediately.</p>
+        <div class="jumps">
+          <a href="#workspace">Workspace</a>
+          <a href="#campaigns">Campaigns</a>
+          <a href="#prospecting">Prospecting</a>
+          <a href="#inbox">Inbox</a>
+          <a href="#intent">Intent</a>
+          <a href="#safety">Safety</a>
+        </div>
+
+        <h3 id="workspace">Workspace</h3>
+        <table>
+          <thead><tr><th>Tool</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr id="get_overview"><td><code>get_overview</code></td><td class="read">Read</td><td>Dashboard snapshot: running campaigns, replies, unread inbox, credits, and account health for this Prosyo workspace.</td></tr>
+            <tr id="get_entitlements"><td><code>get_entitlements</code></td><td class="read">Read</td><td>Current plan name, trial or paid status, LinkedIn and email seat counts, active campaign limit, and credit balance.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="campaigns">Campaigns</h3>
+        <table>
+          <thead><tr><th>Tool</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr id="list_campaigns"><td><code>list_campaigns</code></td><td class="read">Read</td><td>List campaigns in this workspace. Optional status filter: draft, running, paused, completed, archived.</td></tr>
+            <tr id="get_campaign"><td><code>get_campaign</code></td><td class="read">Read</td><td>Campaign detail: status, enrolled count, sequence step types, and connected seats.</td></tr>
+            <tr id="preview_campaign"><td><code>preview_campaign</code></td><td class="read">Read</td><td>Merge a real prospect into the campaign sequence so the messages can be read before launch.</td></tr>
+            <tr id="create_campaign"><td><code>create_campaign</code></td><td class="write">Write</td><td>Create a draft campaign. Does not launch or enroll anyone. Modes: blank, preset, ai, or intent. Stays a draft until a later launch is confirmed.</td></tr>
+            <tr id="launch_campaign"><td><code>launch_campaign</code></td><td class="write">Write</td><td>Prepare launching a draft campaign. Sending starts after <a href="#confirm_action">confirm_action</a>.</td></tr>
+            <tr id="pause_campaign"><td><code>pause_campaign</code></td><td class="write">Write</td><td>Pause a running campaign immediately so it stops queueing new sends. Idempotent.</td></tr>
+            <tr id="resume_campaign"><td><code>resume_campaign</code></td><td class="write">Write</td><td>Prepare resuming a paused campaign. Sending restarts after <a href="#confirm_action">confirm_action</a>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="prospecting">Prospecting and enrichment</h3>
+        <table>
+          <thead><tr><th>Tool</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr id="search_prospects"><td><code>search_prospects</code></td><td class="read">Read</td><td>Search people in this workspace by name, company, or email.</td></tr>
+            <tr id="list_lists"><td><code>list_lists</code></td><td class="read">Read</td><td>Prospect lists with people counts.</td></tr>
+            <tr id="get_prospect_research"><td><code>get_prospect_research</code></td><td class="read">Read</td><td>Latest research with sources, plus icebreaker, connection note, LinkedIn message, email subject, and body.</td></tr>
+            <tr id="enroll_prospects"><td><code>enroll_prospects</code></td><td class="write">Write</td><td>Prepare adding a list or specific people to a campaign. Enrollment waits for <a href="#confirm_action">confirm_action</a>.</td></tr>
+            <tr id="research_prospects"><td><code>research_prospects</code></td><td class="write">Write</td><td>Prepare sourced research and personalised lines. Credits per person. Fresh research is reused free. Runs after confirm.</td></tr>
+            <tr id="enrich_prospects"><td><code>enrich_prospects</code></td><td class="write">Write</td><td>Prepare enrich-only or a personalised first line. Credits per person. Runs after confirm.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="inbox">Unified inbox</h3>
+        <table>
+          <thead><tr><th>Tool</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr id="list_inbox"><td><code>list_inbox</code></td><td class="read">Read</td><td>Recent LinkedIn and email conversations. Optional search and unread filter.</td></tr>
+            <tr id="get_thread"><td><code>get_thread</code></td><td class="read">Read</td><td>One inbox conversation with recent messages.</td></tr>
+            <tr id="draft_reply"><td><code>draft_reply</code></td><td class="write">Write</td><td>Draft an inbox reply. Returns text only. Sending uses <a href="#send_inbox_reply">send_inbox_reply</a>.</td></tr>
+            <tr id="send_inbox_reply"><td><code>send_inbox_reply</code></td><td class="write">Write</td><td>Prepare a LinkedIn or email reply. The message sends after <a href="#confirm_action">confirm_action</a>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="intent">Intent intelligence</h3>
+        <table>
+          <thead><tr><th>Tool</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr id="get_intent_summary"><td><code>get_intent_summary</code></td><td class="read">Read</td><td>Tracking status, included people used and left, today's deliveries, High-intent and Warm counts, and the review queue.</td></tr>
+            <tr id="list_intent_leads"><td><code>list_intent_leads</code></td><td class="read">Read</td><td>People or companies showing buying signals, strongest first, with score, fit, and why now. Locked people show signals only.</td></tr>
+            <tr id="get_intent_lead"><td><code>get_intent_lead</code></td><td class="read">Read</td><td>One Intent person or company: every signal with source and date, fit reasons, research status, and personalised lines.</td></tr>
+            <tr id="get_ideal_customer"><td><code>get_ideal_customer</code></td><td class="read">Read</td><td>Ideal customer rules: roles, industries, company size, locations, exclusions, and delivery settings.</td></tr>
+            <tr id="list_playbooks"><td><code>list_playbooks</code></td><td class="read">Read</td><td>Playbooks and Intent-led audiences: signals watched, Review first or Autopilot, matches, people added, credits used.</td></tr>
+            <tr id="list_review_queue"><td><code>list_review_queue</code></td><td class="read">Read</td><td>People a playbook matched who are waiting for approval, or whose researched message is ready to review.</td></tr>
+            <tr id="get_intent_results"><td><code>get_intent_results</code></td><td class="read">Read</td><td>Signals by source, people delivered, researched, contacted, replied, meetings, customers, and credits per reply.</td></tr>
+            <tr id="save_intent_leads_to_list"><td><code>save_intent_leads_to_list</code></td><td class="write">Write</td><td>Save unlocked Intent people to a list, with personalised lines. Free. Locked people are skipped. Idempotent.</td></tr>
+            <tr id="unlock_intent_leads"><td><code>unlock_intent_leads</code></td><td class="write">Write</td><td>Prepare unlocking locked Intent people. Included people first, then credits. Nothing unlocks until confirm.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="safety">Execution and safety</h3>
+        <table>
+          <thead><tr><th>Tool</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr id="approve_review"><td><code>approve_review</code></td><td class="write">Write</td><td>Prepare approving people in the review queue. Approval researches them for credits. The message is still visible before send.</td></tr>
+            <tr id="confirm_action"><td><code>confirm_action</code></td><td class="write">Write</td><td>Run a launch, enroll, resume, inbox send, unlock, research, enrichment, or review approval after an explicit yes in chat. Pass the confirmation token from the previous tool.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="registry">
+      <div class="wrap">
+        <h2>Official MCP Registry</h2>
+        <p class="sub">Prosyo is published as <a href="https://registry.modelcontextprotocol.io/?q=io.github.ShubhamTuts%2Fprosyo"><code>io.github.ShubhamTuts/prosyo</code></a> version 1.0.1. The record lives in <a href="https://github.com/ShubhamTuts/prosyo-mcp-server/blob/main/server.json"><code>server.json</code></a> and points at <a href="https://app.prosyo.com/ai">https://app.prosyo.com/ai</a> over Streamable HTTP, with no API key and no auth headers.</p>
+        <p class="sub">The <a href="https://registry.modelcontextprotocol.io/">Model Context Protocol Registry</a> is the community index of public MCP servers. The <a href="https://github.com/modelcontextprotocol">Model Context Protocol organization</a> on GitHub runs it collaboratively, backed by Anthropic, GitHub, Microsoft, and PulseMCP. The service is <a href="https://github.com/modelcontextprotocol/registry">modelcontextprotocol/registry</a>. Reference servers live in <a href="https://github.com/modelcontextprotocol/servers">modelcontextprotocol/servers</a>. Clients and other registries read that upstream metadata.</p>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="wrap">
+        <h2>Resource links</h2>
+        <div class="links">
+          <a href="https://prosyo.com"><strong>App and platform</strong><span>prosyo.com</span></a>
+          <a href="https://prosyo.com/docs"><strong>Docs</strong><span>prosyo.com/docs</span></a>
+          <a href="mailto:support@prosyo.com"><strong>Support</strong><span>support@prosyo.com</span></a>
+          <a href="https://prosyo.com/docs/ai/connect-claude/"><strong>Connect Claude</strong><span>Custom connector guide</span></a>
+          <a href="https://smithery.ai/server/hello-kmun/prosyo"><strong>Smithery</strong><span>hello-kmun/prosyo</span></a>
+          <a href="https://github.com/ShubhamTuts/prosyo-mcp-server"><strong>Source</strong><span>ShubhamTuts/prosyo-mcp-server</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">MIT License. Copyright (c) 2026 Shubham Kumar Sinha.</div>
+  </footer>
+</body>
+</html>
