@@ -109,6 +109,12 @@ Add this to [`.cursor/mcp.json`](https://cursor.com/docs/context/mcp) in the pro
 
 Reload MCP servers. Prosyo is available in Agent chat.
 
+### Cursor Marketplace
+
+<a id="marketplace"></a>
+
+Install Prosyo from the Cursor Marketplace. The plugin in this repository connects Cursor to the same hosted server, [https://app.prosyo.com/ai](https://app.prosyo.com/ai). The first connect opens a browser allow screen. No API key goes in the config.
+
 ### Windsurf
 
 <a id="windsurf"></a>

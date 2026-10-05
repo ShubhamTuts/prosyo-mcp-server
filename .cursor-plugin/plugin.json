@@ -1,0 +1,23 @@
+{
+  "name": "prosyo",
+  "version": "1.0.1",
+  "description": "Prosyo hosted MCP for LinkedIn and email outbound from Cursor. Automated outreach that helps you get clients and meetings. Browser OAuth to https://app.prosyo.com/ai, with no API key.",
+  "author": {
+    "name": "Prosyo",
+    "email": "hello@prosyo.com"
+  },
+  "homepage": "https://prosyo.com",
+  "repository": "https://github.com/ShubhamTuts/prosyo-mcp-server",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "linkedin",
+    "outbound",
+    "cold-email",
+    "mcp",
+    "heyreach",
+    "expandi",
+    "lemlist",
+    "sales"
+  ]
+}
