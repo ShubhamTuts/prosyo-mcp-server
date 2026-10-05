@@ -28,7 +28,7 @@
 <p align="center">
   <a href="https://shubhamtuts.github.io/prosyo-mcp-server/"><strong>Open the live guide</strong></a>
   &nbsp;·&nbsp;
-  <a href="https://prosyo.com">Prosyo</a>
+  <a href="https://prosyo.com">AI outbound sales platform</a>
   &nbsp;·&nbsp;
   <a href="https://prosyo.com/docs">Docs</a>
   &nbsp;·&nbsp;
@@ -40,11 +40,21 @@
 </p>
 
 <p align="center">
+  <a href="https://www.linkedin.com/company/prosyo">LinkedIn</a>
+  &nbsp;·&nbsp;
+  <a href="https://www.youtube.com/@prosyo-ai">YouTube</a>
+  &nbsp;·&nbsp;
+  <a href="https://www.linkedin.com/in/shubhamkrsinha">Maintainer</a>
+</p>
+
+<p align="center">
   <a href="#quickstart">Quickstart</a>
   &nbsp;·&nbsp;
   <a href="#architecture">Architecture</a>
   &nbsp;·&nbsp;
   <a href="#tools">30 tools</a>
+  &nbsp;·&nbsp;
+  <a href="#usecases">Use cases</a>
   &nbsp;·&nbsp;
   <a href="#registry">Official registry</a>
   &nbsp;·&nbsp;
@@ -257,6 +267,50 @@ The same directory, with the same anchors, is on the [GitHub Pages guide](https:
 
 ---
 
+## Use Cases
+
+<a id="usecases"></a>
+
+Each of these is one prompt in the chat window. The agent picks the tools, shows the plan and the credit cost, then waits for a yes before anything leaves the workspace.
+
+### Trigger-based prospecting
+
+Build a list from a buying signal instead of a job title. Pull companies showing a trigger, score them against the ICP, keep the ones worth a message and drop the rest before a credit is spent on research.
+
+> "Find agencies hiring SDRs this month, score them against my ICP, save the top 50 to a list."
+
+### Personalisation at volume
+
+[Research](#research_prospects) returns sourced facts, not adjectives, and turns them into an icebreaker, a connection note and a first email that can be read before anything sends.
+
+> "Research these 50, write me a first touch that opens with something specific to each company."
+
+### Multichannel sequences
+
+Draft the full sequence, [preview it](#preview_campaign) merged against a real prospect, then launch it across [LinkedIn outreach and cold email](https://prosyo.com) from the same chat.
+
+> "Build a 4-step sequence: connect, observation on day 3, Loom on day 7, break-up on day 12."
+
+### Inbox triage
+
+Read LinkedIn and email replies in a [single thread view](#list_inbox), classify what is warm and get [drafted responses](#draft_reply) approved one by one.
+
+> "Sweep my unread inbox, tell me who's interested, and draft replies for the warm ones."
+
+### Intent monitoring
+
+[Buying signals](#list_intent_leads) surface ICP-matched people from outside the workspace's own lists, with the source and date behind every signal so the "why now" can be judged.
+
+> "Who showed high intent this week? Show me the signals and save the unlocked ones to a list."
+
+### Pipeline reporting
+
+Campaign health, reply rates, credits consumed and cost per reply, read straight out of the workspace with no CSV in the loop.
+
+> "Which campaign has the best reply rate, and what did each reply cost me in credits?"
+
+---
+
 ## Official MCP Registry
 
 <a id="registry"></a>
@@ -292,5 +346,8 @@ Prosyo's record points at the hosted Streamable HTTP endpoint [https://app.prosy
 - **Registry service:** [modelcontextprotocol/registry](https://github.com/modelcontextprotocol/registry)
 - **Reference servers:** [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)
 - **Source:** [https://github.com/ShubhamTuts/prosyo-mcp-server](https://github.com/ShubhamTuts/prosyo-mcp-server)
+- **Prosyo on LinkedIn:** [linkedin.com/company/prosyo](https://www.linkedin.com/company/prosyo)
+- **YouTube:** [@prosyo-ai](https://www.youtube.com/@prosyo-ai)
+- **Maintainer:** [Shubham Kumar Sinha](https://www.linkedin.com/in/shubhamkrsinha)
 
 Copyright (c) 2026 Prosyo.
